@@ -1,0 +1,24 @@
+{
+  "hearts_J": {
+    "id": "hearts_J", "rank": "J", "suit": "hearts", "symbol": "J♥",
+    "name": "Crimson Swift", "role": "Agile striker", "image": "/static/cards/hearts_J.jpg",
+    "hp": 110, "attack": 78, "defense": 62, "speed": 80, "critChance": 0.12,
+    "moves": {
+      "quick": {"name": "Heart Dash", "power": 35, "priority": 1, "description": "Fast attack; acts before normal moves."},
+      "heavy": {"name": "Scarlet Strike", "power": 62, "priority": -1, "description": "Heavy damage, but moves last."},
+      "guard": {"name": "Wing Guard", "power": 0, "priority": 3, "description": "Reduce incoming damage by 60% this round."},
+      "ultimate": {"name": "BOUNCE BACK: Crimson Rush", "power": 78, "priority": 0, "description": "Powerful strike after taking 55 damage; usable once."}
+    }
+  },
+  "clubs_A": {
+    "id": "clubs_A", "rank": "A", "suit": "clubs", "symbol": "A♣",
+    "name": "Fallout Guardian", "role": "Resilient counterfighter", "image": "/static/cards/clubs_A.jpg",
+    "hp": 120, "attack": 74, "defense": 76, "speed": 62, "critChance": 0.08,
+    "moves": {
+      "quick": {"name": "Club Jab", "power": 36, "priority": 1, "description": "Fast attack; acts before normal moves."},
+      "heavy": {"name": "Tail Crash", "power": 64, "priority": -1, "description": "Heavy damage, but moves last."},
+      "guard": {"name": "Mystic Guard", "power": 0, "priority": 3, "description": "Reduce incoming damage by 60% this round."},
+      "ultimate": {"name": "BOUNCE BACK: Fallout Burst", "power": 74, "priority": 0, "description": "Powerful strike after taking 55 damage; usable once."}
+    }
+  }
+}

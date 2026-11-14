@@ -33,7 +33,7 @@ async function openCamera(){
   el('cameraFrame').style.aspectRatio=`${el('video').videoWidth} / ${el('video').videoHeight}`;
   scanActive=true;recentDetections=[];lastScanLabel='';
   el('capture').disabled=false;
-  el('capture').textContent='↻ RECHECK NOW';
+  el('capture').textContent='RECHECK NOW';
   el('scanStatus').textContent='Align one entire card inside the yellow outline…';
   // Start recognition automatically, without any Capture button press.
   scanTimer=setTimeout(scanFrame,120);
@@ -82,14 +82,14 @@ async function scanFrame(){
   if(match){
    if(selection.includes(match)){
     recentDetections=[];
-    el('scanStatus').textContent='Already scanned '+cards[match].symbol+' — show the other card.';
+    el('scanStatus').textContent='Already scanned '+cards[match].symbol+' - show the other card.';
    }else{
     register(match);
     closeCamera();
     return;
    }
   }else if(result.ok){
-   el('scanStatus').textContent='Detected '+result.label+' — hold steady to confirm…';
+   el('scanStatus').textContent='Detected '+result.label+' - hold steady to confirm...';
   }else{
    el('scanStatus').textContent=result.message || 'Scanning continuously…';
   }
@@ -106,8 +106,8 @@ function startBattle(){if(selection.some(x=>!x))return;
  el('log').textContent='Both fighters enter the arena. Player 1 chooses first.';renderFighters();renderChoices();}
 function renderFighters(){el('roundTitle').textContent='ROUND '+round;
  fighters.forEach((f,i)=>{let hp=Math.max(0,100*f.currentHp/f.hp),meter=Math.max(0,100*f.charge/55);
- el('fight'+i).innerHTML=`<div class="subtitle">PLAYER ${i+1} · ${f.symbol} · ${f.role}</div><h3>${f.name}</h3><img src="${f.image}" alt="${f.name}"><div class="statline"><b>HP</b><span>${f.currentHp} / ${f.hp}</span></div><div class="track"><div class="hpbar" style="width:${hp}%"></div></div><div class="statline"><b>BOUNCE BACK</b><span>${f.charge} / 55</span></div><div class="track"><div class="meterbar" style="width:${meter}%"></div></div><div class="ready">${f.ultimateUsed?'ULTIMATE USED':f.charge>=55?'⚡ BOUNCE BACK READY!':'&nbsp;'}</div><div class="statrow">ATK ${f.attack} · DEF ${f.defense} · SPD ${f.speed} · CRIT ${Math.round(f.critChance*100)}%</div>`})}
-function renderChoices(){const f=fighters[chooser];el('choiceTitle').textContent=`PLAYER ${chooser+1} — CHOOSE YOUR MOVE`;el('choiceHint').textContent=`${f.name} · lock in secretly`;
+ el('fight'+i).innerHTML=`<div class="subtitle">PLAYER ${i+1} · ${f.symbol} · ${f.role}</div><h3>${f.name}</h3><img src="${f.image}" alt="${f.name}"><div class="statline"><b>HP</b><span>${f.currentHp} / ${f.hp}</span></div><div class="track"><div class="hpbar" style="width:${hp}%"></div></div><div class="statline"><b>BOUNCE BACK</b><span>${f.charge} / 55</span></div><div class="track"><div class="meterbar" style="width:${meter}%"></div></div><div class="ready">${f.ultimateUsed?'ULTIMATE USED':f.charge>=55?'BOUNCE BACK READY!':'&nbsp;'}</div><div class="statrow">ATK ${f.attack} · DEF ${f.defense} · SPD ${f.speed} · CRIT ${Math.round(f.critChance*100)}%</div>`})}
+function renderChoices(){const f=fighters[chooser];el('choiceTitle').textContent=`PLAYER ${chooser+1} / CHOOSE YOUR MOVE`;el('choiceHint').textContent=`${f.name} · lock in secretly`;
  el('moveInfo').textContent='Your move stays hidden until both players choose.';
  el('moves').innerHTML='';
  for(const key of ['quick','heavy','guard','ultimate']){const m=f.moves[key];const btn=document.createElement('button');btn.className='move '+(key==='ultimate'?'ultimate':'');
@@ -138,9 +138,9 @@ function resolveRound(){
  for(const i of order){const a=fighters[i],d=fighters[1-i],m=moves[i];if(a.currentHp<=0)continue;
  if(m==='guard'){entries.push(`${a.name} guarded, reducing damage taken this round.`);continue}
  if(m==='ultimate'){if(a.charge<55||a.ultimateUsed){entries.push(a.name+' could not activate their ultimate.');continue}a.charge=0;a.ultimateUsed=true;}
- const hit=damage(a,d,m,guard[1-i]);entries.push(`${a.name} used ${a.moves[m].name} and dealt ${hit.amount} damage${hit.crit?' — CRITICAL HIT!':''}.`);
+ const hit=damage(a,d,m,guard[1-i]);entries.push(`${a.name} used ${a.moves[m].name} and dealt ${hit.amount} damage${hit.crit?' (CRITICAL HIT!)':''}.`);
  if(d.currentHp<=0){entries.push(`${d.name} is knocked out!`);break}
- if(d.charge>=55&&!d.ultimateUsed)entries.push(`⚡ ${d.name} unlocked BOUNCE BACK!`);
+ if(d.charge>=55&&!d.ultimateUsed)entries.push(`${d.name} unlocked BOUNCE BACK!`);
  }
  renderFighters();el('log').innerHTML=entries.map(x=>`<div>${escapeHTML(x)}</div>`).join('');
  const alive=fighters.map(f=>f.currentHp>0);
@@ -153,6 +153,6 @@ function reset(){closeCamera();selection=[null,null];fighters=[];moves=[null,nul
  el('battle').classList.add('hidden');el('setup').classList.remove('hidden');
  ['choice','handoff','roundDone','result'].forEach(id=>el(id).classList.add('hidden'));
  ['slot0','slot1'].forEach((id,i)=>el(id).innerHTML=`<div class="empty"><div class="empty-symbol">+</div><strong>PLAYER ${i+1}</strong><small>AWAITING CARD</small></div>`);
- el('start').disabled=true;el('setupMessage').textContent='Scan J♥ and A♣ — either order.';
+ el('start').disabled=true;el('setupMessage').textContent='Scan J♥ and A♣ / either order.';
 }
 init().catch(e=>{el('setupMessage').textContent='Error loading card database: '+e.message});

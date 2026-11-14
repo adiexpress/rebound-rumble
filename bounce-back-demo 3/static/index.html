@@ -1,10 +1,150 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bounce Back — Haven Demo</title><link rel="stylesheet" href="/static/style.css"></head><body>
-<div class="shell"><header><div class="brand"><span class="bolt">↯</span><span>BOUNCE <em>BACK</em></span></div><div class="eyebrow">HACK CLUB HAVEN · CARD DUEL DEMO</div></header>
-<main><section id="setup" class="view"><div class="intro"><p class="eyebrow gold">THE ARENA AWAITS</p><h1>Scan. Choose.<br><span>Bounce Back.</span></h1><p>Scan two physical cards with your webcam. Then battle using their real artwork, secret move choices, critical hits and comeback ultimates.</p></div>
-<div class="roster"><div class="slot" id="slot0"><div class="empty"><div class="empty-symbol">+</div><strong>PLAYER 1</strong><small>AWAITING CARD</small></div></div><div class="vs">VS</div><div class="slot" id="slot1"><div class="empty"><div class="empty-symbol">+</div><strong>PLAYER 2</strong><small>AWAITING CARD</small></div></div></div>
-<div class="setup-actions"><button class="primary" id="openCamera">◉ LIVE SCAN A CARD</button><button class="ghost" id="manualBtn">MANUAL TEST MODE</button><button class="primary" id="start" disabled>START BATTLE →</button></div><div class="message" id="setupMessage">Scan J♥ and A♣ — either order. Each card can be used once per match.</div>
-<div id="manual" class="manual hidden"><label>Choose a card for the next empty player slot</label><div><button data-id="hearts_J">Load J♥</button><button data-id="clubs_A">Load A♣</button></div></div></section>
-<section id="battle" class="view hidden"><div class="battle-top"><div><p class="eyebrow gold">BOUNCE BACK ARENA</p><h2 id="roundTitle">ROUND 1</h2></div><button id="restart" class="ghost small">↺ NEW MATCH</button></div><div class="fighters"><div id="fight0" class="fighter"></div><div class="vs battle-vs">VS</div><div id="fight1" class="fighter"></div></div><div id="log" class="log" aria-live="polite">Choose your moves to begin.</div>
-<div id="choice" class="choice"><div class="choice-header"><strong id="choiceTitle">PLAYER 1 — CHOOSE YOUR MOVE</strong><span id="choiceHint">Keep your selection hidden from your opponent</span></div><div id="moves" class="moves"></div><p id="moveInfo" class="hint">Choose a move, then lock it in.</p></div><div id="handoff" class="handoff hidden"><h3 id="handoffTitle">PASS TO PLAYER 2</h3><p>Player 1's move is locked and hidden.</p><button class="primary" id="continue">I'M PLAYER 2 →</button></div><div id="roundDone" class="handoff hidden"><button class="primary" id="nextRound">NEXT ROUND →</button></div><div id="result" class="handoff hidden"><h2 id="resultTitle"></h2><p id="resultSubtitle"></p><button class="primary" id="playAgain">PLAY AGAIN ↺</button></div></section></main>
-<div id="modal" class="modal hidden"><div class="modal-card"><div class="modal-head"><strong>SCAN YOUR PHYSICAL CARD</strong><button id="closeCamera" aria-label="Close scanner">✕</button></div><p>Place the entire card inside the yellow outline, with the rank and suit in the upper-left corner. Hold steady for automatic detection.</p><div id="cameraFrame" class="camera-frame"><video id="video" autoplay muted playsinline></video><div class="card-guide" aria-hidden="true"><span class="guide-label">ALIGN CARD HERE</span><span class="guide-corner tl"></span><span class="guide-corner tr"></span><span class="guide-corner bl"></span><span class="guide-corner br"></span></div></div><div id="scanStatus" class="scan-status">Starting camera…</div><div class="modal-actions"><button id="capture" class="primary" disabled>↻ RETRY SCAN</button><button id="switchCamera" class="ghost">SWITCH CAMERA</button></div></div></div>
-</div><script src="/static/app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rebound Rumble</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/theme.css">
+</head>
+<body>
+  <div class="stage-viewport">
+    <main class="stage">
+      <svg class="stage-tiles" viewBox="0 0 640 360" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <pattern id="pixelfield" width="32" height="32" patternUnits="userSpaceOnUse">
+            <rect x="0" y="0" width="32" height="32" fill="var(--sky)"></rect>
+            <rect x="4" y="5" width="4" height="4" fill="var(--paper)" opacity=".28"></rect>
+            <rect x="8" y="5" width="8" height="4" fill="var(--paper)" opacity=".28"></rect>
+            <rect x="8" y="9" width="8" height="4" fill="var(--paper)" opacity=".28"></rect>
+            <rect x="20" y="20" width="8" height="4" fill="var(--grass)" opacity=".38"></rect>
+            <rect x="0" y="28" width="16" height="4" fill="var(--leaf)" opacity=".32"></rect>
+          </pattern>
+        </defs>
+        <rect width="640" height="360" fill="url(#pixelfield)"></rect>
+      </svg>
+
+      <section id="setup" class="view select-screen">
+        <header class="game-header">
+          <div class="pixel-logo" aria-label="Rebound Rumble">
+            <span>REBOUND</span>
+            <strong>RUMBLE</strong>
+          </div>
+          <div class="press-start">PRESS START</div>
+          <div class="monitor-window">
+            <div class="monitor-label">CAM / 01</div>
+            <div id="cameraFrame" class="camera-frame">
+              <video id="video" autoplay muted playsinline></video>
+              <div class="card-guide" aria-hidden="true">
+                <span class="guide-label">CARD HERE</span>
+                <span class="guide-corner tl"></span>
+                <span class="guide-corner tr"></span>
+                <span class="guide-corner bl"></span>
+                <span class="guide-corner br"></span>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="select-caption">
+          <span>FIGHTER SELECT</span>
+          <span>ROUND 01 / 01</span>
+        </div>
+
+        <div class="roster">
+          <div class="slot card-frame" id="slot0">
+            <div class="empty" id="slot-p1">
+              <span class="card-silhouette" aria-hidden="true"></span>
+              <strong>P1</strong>
+              <small>INSERT CARD</small>
+            </div>
+          </div>
+          <div class="vs">VS</div>
+          <div class="slot card-frame" id="slot1">
+            <div class="empty" id="slot-p2">
+              <span class="card-silhouette" aria-hidden="true"></span>
+              <strong>P2</strong>
+              <small>INSERT CARD</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-row" aria-label="game menu">
+          <button class="menu-action primary" id="openCamera" type="button">SCAN CARD</button>
+          <button class="menu-action ghost" id="manualBtn" type="button">MANUAL MODE</button>
+          <button class="menu-action primary" id="start" type="button" disabled>FIGHT</button>
+        </div>
+
+        <div id="manual" class="manual hidden">
+          <span>CHOOSE CARD</span>
+          <button type="button" data-id="hearts_J">J HEARTS</button>
+          <button type="button" data-id="clubs_A">A CLUBS</button>
+        </div>
+
+        <div class="select-footer">
+          <div class="dialogue-box">
+            <span class="dialogue-caret" aria-hidden="true"></span>
+            <p class="dialogue-copy" id="setupMessage">Show a card to the camera!</p>
+          </div>
+          <div class="meter-reserve">
+            <span>BOUNCE BACK</span>
+            <div class="meter-frame"><i></i></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="battle" class="view battle-screen hidden">
+        <div class="battle-top">
+          <div class="round-label"><span>ARENA</span><h2 id="roundTitle">ROUND 1</h2></div>
+          <button id="restart" class="ghost small" type="button">NEW MATCH</button>
+        </div>
+        <div class="fighters">
+          <div id="fight0" class="fighter"></div>
+          <div class="vs battle-vs">VS</div>
+          <div id="fight1" class="fighter"></div>
+        </div>
+        <div id="log" class="log" aria-live="polite">Choose your moves to begin.</div>
+        <div id="choice" class="choice">
+          <div class="choice-header">
+            <strong id="choiceTitle">PLAYER 1 / CHOOSE YOUR MOVE</strong>
+            <span id="choiceHint">Keep your selection hidden</span>
+          </div>
+          <div id="moves" class="moves"></div>
+          <p id="moveInfo" class="hint">Choose a move, then lock it in.</p>
+        </div>
+        <div id="handoff" class="handoff hidden">
+          <h3 id="handoffTitle">PASS TO PLAYER 2</h3>
+          <p>Player 1's move is locked.</p>
+          <button class="primary" id="continue" type="button">PLAYER 2 READY</button>
+        </div>
+        <div id="roundDone" class="handoff hidden">
+          <button class="primary" id="nextRound" type="button">NEXT ROUND</button>
+        </div>
+        <div id="result" class="handoff hidden">
+          <h2 id="resultTitle"></h2>
+          <p id="resultSubtitle"></p>
+          <button class="primary" id="playAgain" type="button">PLAY AGAIN</button>
+        </div>
+      </section>
+
+      <div id="modal" class="modal hidden">
+        <div class="modal-card">
+          <div class="modal-head">
+            <strong>CARD SCANNER</strong>
+            <button id="closeCamera" type="button" aria-label="Close scanner">X</button>
+          </div>
+          <p>Fit the full card inside the frame.</p>
+          <div id="scanStatus" class="scan-status">Starting camera...</div>
+          <div class="modal-actions">
+            <button id="capture" class="primary" type="button" disabled>SCAN AGAIN</button>
+            <button id="switchCamera" class="ghost" type="button">FLIP CAM</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
